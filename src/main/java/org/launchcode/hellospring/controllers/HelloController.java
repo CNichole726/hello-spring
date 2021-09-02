@@ -5,44 +5,47 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @ResponseBody
-@RequestMapping("hello")
 public class HelloController {
 
-    // Handles request at path /hello
-//    @GetMapping("hello") //this method will only accept Get requests
-//    @ResponseBody //tells our program to accept http requests
-//    public String hello(){
-//        return "Hello, Spring!";
-//    }
-
-    // lives at /hello/goodbye since we added @RequestMapping("hello") on the class
-    @GetMapping("goodbye") //this method will only accept Get request
-    public String goodbye(){
-        return "Goodbye, Spring!";
-    }
-
-    // handles requests of the form /hello?name=LaunchCode
-    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
-    public String helloWithQueryParam(@RequestParam String name){
-        return "Hello, " + name + "!";
-    }
-
-    // Handles requests of the form /hello/LaunchCode
-    @GetMapping("{name}")
-
-    public String helloWithPathParam(@PathVariable String name){
-        return "Hello, " + name + "!";
+    @RequestMapping(value = "post", method = {RequestMethod.GET, RequestMethod.POST})
+    public String helloPost(@RequestParam String name, @RequestParam String language){
+        if (name == null) {
+            name = "World";
+        }
+        return createMessage(name, language);
     }
 
     @GetMapping("form")
-    public String helloForm(){
-        return "<html>" +
+    public String createForm(){
+        String html =  "<html>" +
                     "<body>" +
-                        "<form action='hello' method='post'>" + //submit a request to /hello
+                        "<form action='/post' method='post'>" + //submit a request to /hello
                             "<input type = 'text' name= 'name'>" +
+                            "<select name ='language' id='language>" +
+                                "<option value=' '> --Please choose a language--</option>" +
+                                "<option value='french'>French</option>" +
                             "<input type='submit' value='Greet me!'>" +
                         "</form>" +
                     "</body>" +
                 "</html>";
+        return html;
+    }
+
+    @PostMapping("form")
+    public static String createMessage(@RequestParam String name, String language){
+        String greet = "";
+
+        if(language.equals("english")){
+            greet = "Hello";
+        } else if (language.equals("french")){
+            greet = "Bonjour";
+        } else if(language.equals("portuguese")){
+            greet = "Ola";
+        } else if(language.equals("italian")){
+            greet = "Bonjourno";
+        } else if(language.equals("spanish")){
+            greet = "Hola";
+        }
+        return greet + " " + name;
     }
 }
