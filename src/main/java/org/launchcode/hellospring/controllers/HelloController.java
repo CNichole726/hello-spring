@@ -4,9 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@ResponseBody
 public class HelloController {
 
+    @ResponseBody
     @RequestMapping(value = "post", method = {RequestMethod.GET, RequestMethod.POST})
     public String helloPost(@RequestParam String name, @RequestParam String language){
         if (name == null) {
@@ -15,22 +15,18 @@ public class HelloController {
         return createMessage(name, language);
     }
 
-    @GetMapping("form")
-    public String createForm(){
-        String html =  "<html>" +
-                    "<body>" +
-                        "<form action='/post' method='post'>" + //submit a request to /hello
-                            "<input type = 'text' name= 'name'>" +
-                            "<select name ='language' id='language>" +
-                                "<option value=' '> --Please choose a language--</option>" +
-                                "<option value='french'>French</option>" +
-                            "<input type='submit' value='Greet me!'>" +
-                        "</form>" +
-                    "</body>" +
-                "</html>";
-        return html;
+    @ResponseBody
+    @GetMapping("goodbye")
+    public String goodbye(){
+        return "Goodbye, Spring!";
     }
 
+    @GetMapping("form")
+    public String createForm(){
+       return "form";
+    }
+
+    @ResponseBody
     @PostMapping("form")
     public static String createMessage(@RequestParam String name, String language){
         String greet = "";
